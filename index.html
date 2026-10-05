@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineEquip // Gestão de Equipamentos Audiovisuais</title>
+  <meta name="description" content="Catálogo profissional de equipamentos audiovisuais para cinema, broadcast e produção de vídeo. Câmeras, microfones, lentes e iluminação.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Cabeçalho Principal no estilo Estúdio / Cinema -->
+  <header class="app-header" id="app-header">
+    <div class="header-container">
+      <div class="brand-block">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          </svg>
+          <span class="rec-dot" title="Gravação ativa"></span>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">CINE<span class="accent">EQUIP</span></h1>
+          <p class="brand-subtitle">Acervo de Equipamentos Audiovisuais</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="stats-badge" id="stats-badge">
+          <span class="stats-dot"></span>
+          <span id="equipment-count-text">Carregando catálogo...</span>
+        </div>
+        <button id="btn-refresh" class="btn-primary" aria-label="Atualizar lista de equipamentos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+          <span>Sincronizar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Barra de Busca / Filtro rápido -->
+  <section class="toolbar-section">
+    <div class="toolbar-container">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Filtrar por marca ou modelo (ex.: Sony, Canon, Røde...)"
+          aria-label="Filtrar equipamentos por marca ou modelo"
+        >
+      </div>
+    </div>
+  </section>
+
+  <!-- Conteúdo Principal / Catálogo -->
+  <main class="main-content" id="main-content">
+    <div class="content-container">
+
+      <!-- Estado 1: Carregando (Skeleton Loaders) -->
+      <section id="loading-state" class="state-container loading-grid" aria-live="polite">
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-tag"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-price"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-tag"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-price"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-tag"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-price"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-tag"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-price"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-tag"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-price"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-tag"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-price"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Estado 2: Erro de Conexão ou Servidor -->
+      <section id="error-state" class="state-container message-box hidden" aria-live="assertive">
+        <div class="message-icon error-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h2 class="message-title">Falha de Conexão com o Estúdio</h2>
+        <p class="message-description" id="error-message-text">
+          Não foi possível comunicar com a API de equipamentos. Verifique se o servidor backend está online e tente novamente.
+        </p>
+        <button id="btn-retry" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+          <span>Tentar Novamente</span>
+        </button>
+      </section>
+
+      <!-- Estado 3: Lista Vazia -->
+      <section id="empty-state" class="state-container message-box hidden">
+        <div class="message-icon empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+            <line x1="7" y1="2" x2="7" y2="22"></line>
+            <line x1="17" y1="2" x2="17" y2="22"></line>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <line x1="2" y1="7" x2="7" y2="7"></line>
+            <line x1="2" y1="17" x2="7" y2="17"></line>
+            <line x1="17" y1="17" x2="22" y2="17"></line>
+            <line x1="17" y1="7" x2="22" y2="7"></line>
+          </svg>
+        </div>
+        <h2 class="message-title">Nenhum Equipamento Disponível</h2>
+        <p class="message-description" id="empty-state-text">
+          O catálogo está vazio no momento ou nenhum equipamento corresponde à busca.
+        </p>
+      </section>
+
+      <!-- Estado 4: Grid de Equipamentos (Renderização Dinâmica) -->
+      <section id="catalog-section" class="catalog-section hidden">
+        <div id="equipamentos-grid" class="equipamentos-grid">
+          <!-- Os cards de equipamentos serão injetados dinamicamente via script.js -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Rodapé Estúdio -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p class="footer-copy">
+        <strong>CineEquip</strong> &copy; 2026 &mdash; Sistema de Gestão Audiovisual. Todos os direitos reservados.
+      </p>
+      <div class="footer-badge">
+        <span class="status-indicator"></span>
+        <span>Node.js + Express + MongoDB Atlas</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
