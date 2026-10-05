@@ -7,7 +7,7 @@
 
 // 1. CONFIGURAÇÃO DA API
 // Altere para a URL de produção após o deploy na Vercel
-const API_URL = "http://localhost:3000/api/equipamentos";
+const API_URL = "https://backend-audiovisual.vercel.app/api/equipamentos";
 
 // 2. ELEMENTOS DO DOM
 const loadingState = document.getElementById("loading-state");
